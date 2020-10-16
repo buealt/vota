@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" media="all">
+        <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/all.js"
+            integrity="sha384-b3ua1l97aVGAPEIe48b4TC60WUQbQaGi2jqAWM90y0OZXZeyaTCWtBTKtjW2GXG1" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/static/style.css" />
+        <link rel="stylesheet" href="/static/micromodal.css" />
+        <script type="text/javascript" src="/static/script.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+        <title>Vota-Berlin</title>
+    </head>
+    <body>
+        <div id="progress-wrapper">
+            <div id="progress"></div>
+        </div>
+        <div id="gallery">
+            <div id="galleryShadow">
+                <div id="heading">
+                <h1>Was soll hier entstehen?</h1>
+                <h2>Wähle drei Wünsche aus</h2>
+            </div>
+            </div>
+            {% for category in images.keys() %}
+                <ul id="{{ category }}" style="background-image: url(/static/background/{{ category }}.png)">
+                    <div class="category-title"><span>{{ category.replace("ae","ä").replace("oe","ö").replace("ue","ü").capitalize() }}</span></div>
+                    {% for image in images[category] %}
+                        {% set img = image["image"] %}
+                        {% set img_id = category + '_' + img.rsplit('.',1)[0].lower().replace(" ","_") %}
+                        {% set img_url = '/static/images/' + category + '/' + img %}
+                        <li id="{{ img_id }}">
+                            <div class="aspect-ratio-box">
+                                <div class="shade"></div>
+                                <img class="main-image" src="{{ img_url }}" alt="{{ img_id }}" loading="lazy">
+                                {% if image["description"] %}
+                                    <div class="info-button-container"
+                                         data-micromodal-trigger="modal-{{ img_id }}">
+                                        <i class="fas fa-info-circle info-button"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+        <div id="scroll"></div>
+        <div id="nextButton" class="next-button disabled">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <div id="hiddenForm"></div>
+
+        <!-- modals with the information for each image -->
+        {% for category in images.keys() %}
+            {% for image in images[category] %}
+                {% set img = image["image"] %}
+                {% set img_id = category + '_' + img.rsplit('.',1)[0].lower().replace(" ","_") %}
+                {% set img_url = '/static/images/' + category + '/' + img %}
+                <div class="modal micromodal-slide" id="modal-{{ img_id }}" aria-hidden="true">
+                    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-{{ img_id }}-title" >
+                            <header class="modal__header">
+                                <img class="modal__image" src="{{ img_url }}" alt="{{ img_id }}" loading="lazy">
+                                {% if image["description"] %}
+                                    <h2 class="modal__title" id="modal-{{ img_id }}-title">
+                                      {{ image["description"]["title"] }}
+                                    </h2>
+                                {% endif %}
+                                <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                            </header>
+                        {% if image["description"] %}
+                            <main class="modal__content" id="modal-{{ img_id }}-content">
+                                {{ image["description"]["content"] | safe }}
+                            </main>
+                        {% endif %}
+                        <footer class="modal__footer">
+                            <button class="modal__btn modal__btn-primary"
+                                    onclick="MicroModal.close('modal-{{ img_id }}'); document.querySelector('#{{ img_id }} .main-image').click()">Select</button>
+                            <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+                        </footer>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <!-- modal for too many selected error -->
+        <div class="modal micromodal-slide" id="modal-tms-error" aria-hidden="true">
+            <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-tms-error-title" >
+                    <header class="modal__header">
+                        <h2 class="modal__title" id="modal-tms-error-title">
+                          Too Many Images Selected
+                        </h2>
+                        <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                    </header>
+                    <main class="modal__content" id="modal-tms-error-content">
+                        You have already selected 4 Images, if you want to select a different image please deselect one of the currently selected ones (simply tap on it again).
+                    </main>
+                    <footer class="modal__footer">
+                        <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

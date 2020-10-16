@@ -1,0 +1,5 @@
+flask
+gunicorn
+psycopg2-binary
+requests
+Flask-gzip

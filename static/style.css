@@ -1,0 +1,277 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Open Sans", sans-serif;
+    overflow: hidden;
+}
+
+#gallery {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* start showing images below the progress bar and allow scrolling last image further up  */
+    padding: 75px 0 0;
+    overflow: auto;
+    /* hide scrollbars in IE */
+    -ms-overflow-style: none;
+    /* hide scrollbars in Firefox */
+    overflow: -moz-scrollbars-none;
+    scrollbar-width: none;
+}
+#galleryShadow {
+    position: sticky;
+    background: #222222;
+    /* padding-top + y-offset of shadow - 100% (height of whole div)*/
+    top: calc(125px - 100%);
+    margin: -100px 0px 0px;
+    padding: 100px calc(50px + 40px) 50px 50px;
+    left: -10vw;
+    right: -10vw;
+    overflow-y: hidden;
+    -webkit-box-shadow: 0px 25px 50px 50px #222222;
+    -moz-box-shadow: 0px 25px 50px 50px #222222;
+    box-shadow: 0px 25px 50px 50px #222222;
+    z-index: 5;
+}
+
+/* hide scrollbars in Chrome, Safari, Opera */
+#gallery::-webkit-scrollbar {
+    display: none;
+}
+
+#gallery ul {
+    list-style: none;
+    margin: 0;
+    padding: 50px 0 50px 5px;
+
+    /* background */
+    background-size: cover;
+}
+
+#gallery ul:nth-child(2) {
+    padding-top: 100px;
+}
+
+#gallery ul:last-child {
+    padding-bottom: 75px;
+}
+
+#gallery ul .category-title {
+    position: sticky;
+    top: 0;
+    float: right;
+    width: 22px;
+    z-index: 12;
+    /* like dimensions for images but without the subtracted padding */
+    height: calc(calc(100vw - 40px) / 2);
+    /* same padding-top as images */
+    padding: 10px 2.5px 0;
+
+    color: white;
+    font-size: 20px;
+}
+
+#gallery ul .category-title span {
+    display: block;
+    transform: rotate(90deg);
+}
+
+#gallery ul li {
+    display: inline-block;
+}
+
+#gallery .main-image {
+    /* border-radius: 50%; */
+    border-width: 2vw;
+    border-style: solid;
+    border-color: transparent;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+#gallery .selected .main-image {
+    border-color: white;
+}
+
+#gallery .shade {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+#gallery .selected .shade {
+    background: white;
+    opacity: 0.5;
+}
+
+li .aspect-ratio-box {
+    /* gallery padding: 10px; scroll indicator: 30px  */
+    width: calc(calc(100vw - 40px) / 2);
+}
+
+.aspect-ratio-box {
+    position: relative;
+    height: 0;
+    padding-top: 100%;
+}
+
+.aspect-ratio-box .main-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.info-button-container {
+    /* styling */
+    color: white;
+    background: black;
+    opacity: 0.75;
+
+    /* hacks to make the styling work */
+    border-radius: 50%;
+    width: 10vw;
+    height: 10vw;
+    font-size: 11vw;
+    margin: 1vw;
+    line-height: 0;
+
+    position: absolute;
+    bottom: 3vw;
+    right: 3vw;
+}
+
+.info-button-container:active,
+.info-button-container:hover {
+    opacity: 1;
+}
+
+.info-button {
+    /* margin hacks to place parent container well inside of the visible part of the icon */
+    margin: -0.5vw;
+}
+
+.next-button {
+    padding-left: 5px;
+    width: calc(70px - 5px);
+    height: 70px;
+    background-color: black;
+    border-radius: 50%;
+    box-shadow: 0 6px 10px 0 #666;
+
+    font-size: 50px;
+    line-height: 70px;
+    color: white;
+    text-align: center;
+
+    position: fixed;
+    right: 30px;
+    bottom: 50px;
+
+    transition: all 0.1s ease-in-out;
+
+    cursor: pointer;
+}
+
+.next-button:hover {
+    box-shadow: 0 6px 14px 0 #666;
+    transform: scale(1.05);
+}
+
+.next-button.disabled {
+    opacity: 0.5;
+    cursor: initial;
+}
+
+.next-button.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+#hiddenForm {
+    display: none;
+    visibility: hidden;
+}
+
+#progress-wrapper {
+    position: sticky;
+    top: 25px;
+    padding-top: 10px;
+    border-top: white 3px solid;
+    width: calc(100vw - 60px);
+    margin: 25px 20px 0;
+    z-index: 10;
+}
+
+#progress {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -26px;
+}
+
+.indicator {
+    /* border-radius: 50%; */
+    /*border: black 1px solid;*/
+    background: #222222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    content: " ";
+    width: 10px;
+    height: 10px;
+    margin-top: 10px;
+    transition: width 0.25s, height 0.25s, margin 0.25s, font-size 0.25s;
+    border: 1px solid;
+    font-size: 0;
+}
+
+.indicator span {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.25s, opacity 0.25s;
+}
+
+.indicator.active {
+    margin-top: 0;
+    width: 31px;
+    height: 31px;
+    font-size: 20px;
+}
+
+.indicator.active span {
+    visibility: visible;
+    opacity: 1;
+}
+
+.indicator.active:last-child {
+    background-image: linear-gradient(45deg, transparent 40%, white 40%, white 50%, transparent 50%, transparent 90%, white 90%, white 100%);
+    background-size: 5.00px 5.00px;
+}
+
+#scroll {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: -10vh;
+    width: 25px;
+    background: #222222;
+    transform: translate3d(0,0,0);
+    z-index: 10;
+}
+
+#heading {
+    text-align: center;
+    color: white;
+    word-break: break-word;
+    max-width: 100%;
+    overflow-y: hidden;
+}
