@@ -1,10 +1,10 @@
-# printerest
+# Vota
 
 ### Deploying
 For generating a new Heroku app, use:
 ```$ heroku create```
 
-For an already existing Heroku app `%APPNAME`, add a remote to the local repository `printerest` with:
+For an already existing Heroku app `%APPNAME`, add a remote to the local repository `vota` with:
 ```$ heroku git:remote -a %APPNAME```
 
 On Ubuntu, if heroku was installed with snap, you might need to replace `heroku` with `/snap/bin/heroku` on the preceeding commands.
